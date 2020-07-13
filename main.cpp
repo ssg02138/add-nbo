@@ -52,7 +52,25 @@ void  write_0x12345678() {
 	uint32_t* p = reinterpret_cast<uint32_t*>(network_buffer);
 	//uint32_t n = my_ntohl(*p); // TODO
 	uint16_t n = ntohl(*p); // C 컴파일러 기본 제공 함수, 빅엔디안일 경우도 정렬 -> 구현한건 34 12
+	network_buffer = file_io();
 	printf("32 bit number=0x%x\n", n);
+}
+
+void file_io() {
+	FILE *fp ;
+	int index;
+	int data;
+	uint8_t file_buffer[] = {0, 0, 0, 0};
+
+	fp = fopen("file.txt", "r");
+	int i = 0;
+	while(fscanf(fp, "%x", &data) != EOF){
+		file_buffer[i] = data;
+		i++;
+	}
+	fclose(fp);
+	
+	return file_buffer;
 }
 
 int main() {
