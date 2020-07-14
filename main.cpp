@@ -68,14 +68,14 @@ void file_io() {
 		file_buffer[i] = data;
 		i++;
 	}
-	fclose(fp);
+	fclose(fp1);
 	
 	fp2 = fopen("file2.txt", "r");
 	while(fscanf(fp2, "%x", &data) != EOF){
 		file_buffer[i] = data;
 		i++;
 	}
-	fclose(fp);
+	fclose(fp2);
 	
 	return file_buffer;
 }
