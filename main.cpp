@@ -3,7 +3,7 @@
 #include <stdio.h> // for printf
 #include <netinet/in.h>
 
-void dump(void* p, size_t n) {	// Æ¯Á¤ ¸Ş¸ğ¸® À§Ä¡¿¡ ´ıÇÁ½ÃÄÑÁÖ´Â ÇÔ¼ö
+void dump(void* p, size_t n) {	// íŠ¹ì • ë©”ëª¨ë¦¬ ìœ„ì¹˜ì— ë¤í”„ì‹œì¼œì£¼ëŠ” í•¨ìˆ˜
 	uint8_t* u8 = static_cast<uint8_t*>(p);
 	size_t i = 0;
 	while (true) {
@@ -16,7 +16,7 @@ void dump(void* p, size_t n) {	// Æ¯Á¤ ¸Ş¸ğ¸® À§Ä¡¿¡ ´ıÇÁ½ÃÄÑÁÖ´Â ÇÔ¼ö
 }
 
 void write_4660() {
-	uint16_t port = 4660; // uint16_t(2byte), 0x1234 -> ¸Ş¸ğ¸® 34 12 ÀúÀå (intel)
+	uint16_t port = 4660; // uint16_t(2byte), 0x1234 -> ë©”ëª¨ë¦¬ 34 12 ì €ì¥ (intel)
 	printf("port number = %d\n", port);
 	dump(&port, sizeof(port));
 }
@@ -31,10 +31,10 @@ uint16_t my_ntohs(uint16_t n) {
 }
 
 void  write_0x1234() {
-	uint8_t network_buffer[] = { 0x12, 0x34 };// ¸Ş¸ğ¸® 34 12 ÀúÀå
+	uint8_t network_buffer[] = { 0x12, 0x34 };// ë©”ëª¨ë¦¬ 34 12 ì €ì¥
 	uint16_t* p = reinterpret_cast<uint16_t*>(network_buffer);
-	//uint16_t n = my_ntohs(*p); // TODO, 12 34 ÀúÀå
-	uint16_t n = ntohs(*p); // C ÄÄÆÄÀÏ·¯ ±âº» Á¦°ø ÇÔ¼ö
+	//uint16_t n = my_ntohs(*p); // TODO, 12 34 ì €ì¥
+	uint16_t n = ntohs(*p); // C ì»´íŒŒì¼ëŸ¬ ê¸°ë³¸ ì œê³µ í•¨ìˆ˜
 
 	scanf("%hu", &a);
 	uint16_t n2 = ntohs(a);
@@ -51,20 +51,27 @@ void  write_0x12345678() {
 	uint8_t network_buffer[] = { 0x12, 0x34, 0x56, 0x78 };
 	uint32_t* p = reinterpret_cast<uint32_t*>(network_buffer);
 	//uint32_t n = my_ntohl(*p); // TODO
-	uint16_t n = ntohl(*p); // C ÄÄÆÄÀÏ·¯ ±âº» Á¦°ø ÇÔ¼ö, ºò¿£µğ¾ÈÀÏ °æ¿ìµµ Á¤·Ä -> ±¸ÇöÇÑ°Ç 34 12
+	uint16_t n = ntohl(*p); // C ì»´íŒŒì¼ëŸ¬ ê¸°ë³¸ ì œê³µ í•¨ìˆ˜, ë¹…ì—”ë””ì•ˆì¼ ê²½ìš°ë„ ì •ë ¬ -> êµ¬í˜„í•œê±´ 34 12
 	network_buffer = file_io();
 	printf("32 bit number=0x%x\n", n);
 }
 
 void file_io() {
-	FILE *fp ;
+	FILE *fp1, *fp2;
 	int index;
 	int data;
 	uint8_t file_buffer[] = {0, 0, 0, 0};
 
-	fp = fopen("file.txt", "r");
+	fp1 = fopen("file1.txt", "r");
 	int i = 0;
-	while(fscanf(fp, "%x", &data) != EOF){
+	while(fscanf(fp1, "%x", &data) != EOF){
+		file_buffer[i] = data;
+		i++;
+	}
+	fclose(fp);
+	
+	fp2 = fopen("file2.txt", "r");
+	while(fscanf(fp2, "%x", &data) != EOF){
 		file_buffer[i] = data;
 		i++;
 	}
